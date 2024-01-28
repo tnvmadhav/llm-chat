@@ -12,7 +12,10 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var allTemplates = template.Must(template.ParseGlob("templates/*.html"))
+var allTemplates = template.Must(
+	template.Must(
+		template.ParseGlob("templates/*.html"),
+	).ParseGlob("templates/_partials/*"))
 
 func serveChat(res http.ResponseWriter, req *http.Request) {
 	allTemplates.ExecuteTemplate(res, "chat.html", nil)

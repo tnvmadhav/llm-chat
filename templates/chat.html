@@ -6,15 +6,17 @@
   		<meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        {{ template "nav" . }}
         <div>
-            <div id="chatbox" class="w-97vw border-1 border-black overflow-auto p-10 bg-gray-200">
+            <div id="chatbox" class="w-97vw border-1 border-black overflow-auto p-10 bg-white-200">
                 <div id="messages"></div>
             </div>
-            <div class="flex justify-evenly w-12/12 m-2 items-center">
+            <div class="flex justify-evenly w-12/12 mx-2 items-center">
                 <textarea id="input" rows="1" class="block p-2.5 text-sm w-11/12 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
                 <button class="mx-1 md:mx-4 sm:2/12 md:w-1/12 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-1 md:px-4 rounded" id="send">Send</button>
             </div>
         </div>
+        {{ template "footer" .}}
     </body>
 </html>
 
@@ -39,7 +41,7 @@
     100% {opacity: 0;}
 }
 #chatbox {
-    height: 95vh;
+    height: 80vh;
 }
 
 #messages {
@@ -48,6 +50,7 @@
 
 .role1, .role2 {
     max-width: 40%;
+    white-space: initial;
     padding: 10px;
     border-radius: 18px;
     margin-bottom: 10px;
