@@ -1,0 +1,137 @@
+<div id="chatbox">
+    <div id="messages"></div>
+</div>
+<input id="input" type="text" placeholder="Type a message...">
+<button id="send">Send</button>
+
+<style>
+.loading {
+    margin-top: 50px;
+    text-align: center;
+}
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    margin: 0 5px;
+    opacity: 0;
+    animation: loading 1s infinite;
+}
+@keyframes loading {
+    0% {opacity: 0;}   
+    50% {opacity: 1;} 
+    100% {opacity: 0;}
+}
+#chatbox {
+    width: 97vw;
+    height: 90vh;
+    border: 1px solid black;
+    overflow: auto;
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+#messages {
+    padding: 5px;
+}
+
+#input {
+    width: 95vw;
+    margin-top: 10px;
+}
+
+#send {
+    width: 50px;
+    margin-top: 10px;
+}
+
+.role1, .role2 {
+    max-width: 40%;
+    padding: 10px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    position: relative;
+    font-size: 16px;
+}
+
+.role1 {
+    align-self: flex-start;
+    background-color: #007aff;
+    color: white;
+    margin-right: auto;
+}
+
+.role2 {
+    width: 40%;
+    align-self: flex-end;
+    background-color: #e1ffc7;
+    color: black;
+    margin-left: auto;
+}
+</style>
+
+<script>
+var uuid = generateUUID();
+var socket = new WebSocket("ws://localhost:8000/ws");
+
+socket.onopen = function(e) {
+  console.log("[open] Connection established");
+};
+
+socket.onmessage = function(event) {
+  var messages = document.getElementById('messages');
+  var data = JSON.parse(event.data);
+  if (data.role != "user") {
+    let loadingChild = messages.lastElementChild;
+    loadingChild.className = "role1"
+    loadingChild.innerHTML = ""    
+    loadingChild.innerHTML = `${data.text}<br><br><small>Powered by ${data.role}</small>`;
+    messages.appendChild(loadingChild);
+  } else {
+    var message = document.createElement('div');
+    message.innerHTML = `${data.text}`;
+    message.className = "role2"
+    messages.appendChild(message);
+    var loading = document.createElement('div')
+    loading.innerHTML = `<span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>`;
+    loading.className = 'loading role1'
+    messages.appendChild(loading);
+  }
+};
+
+socket.onerror = function(error) {
+  console.log(`[error] ${error.message}`);
+};
+
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (Math.random() * 16) | 0,
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+document.getElementById('send').addEventListener('click', function() {
+    var input = document.getElementById('input');
+
+    var message = {
+        text: input.value,
+        user: uuid,
+        role: "user"
+    };
+
+    socket.send(JSON.stringify(message));
+
+    input.value = '';
+});
+
+let dots = Array.from(document.querySelectorAll('.dot'));
+dots.forEach((dot, index) => {
+    dot.style.animationDelay = `${index * 300}ms`;
+});
+</script>
