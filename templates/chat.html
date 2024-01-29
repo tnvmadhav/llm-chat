@@ -48,7 +48,7 @@
     padding: 5px;
 }
 
-.role1, .role2 {
+.system, .user {
     max-width: 40%;
     white-space: initial;
     padding: 10px;
@@ -59,14 +59,14 @@
     font-size: 16px;
 }
 
-.role1 {
+.system {
     align-self: flex-start;
     background-color: #007aff;
     color: white;
     margin-right: auto;
 }
 
-.role2 {
+.user {
     width: 40%;
     align-self: flex-end;
     background-color: #e1ffc7;
@@ -77,10 +77,9 @@
 
 <script>
 document.getElementById("input").addEventListener("keydown", function(e) {
-console.log("Hey");
-if (e.keyCode == 13 && e.metaKey) {
-document.getElementById("send").click();
-}
+    if (e.keyCode == 13 && e.metaKey) {
+    document.getElementById("send").click();
+    }
 });
 
 var uuid = generateUUID();
@@ -95,20 +94,20 @@ socket.onmessage = function(event) {
   var data = JSON.parse(event.data);
   if (data.role != "user") {
     let loadingChild = messages.lastElementChild;
-    loadingChild.className = "role1"
+    loadingChild.className = "system"
     loadingChild.innerHTML = ""    
     loadingChild.innerHTML = `${data.text}<br><br><small>Powered by ${data.role}</small>`;
     messages.appendChild(loadingChild);
   } else {
     var message = document.createElement('div');
     message.innerHTML = `${data.text}`;
-    message.className = "role2"
+    message.className = "user"
     messages.appendChild(message);
     var loading = document.createElement('div')
     loading.innerHTML = `<span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>`;
-    loading.className = 'loading role1'
+    loading.className = 'loading system'
     messages.appendChild(loading);
   }
 };
