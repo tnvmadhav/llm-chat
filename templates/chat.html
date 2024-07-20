@@ -100,7 +100,7 @@ socket.onmessage = function(event) {
     messages.appendChild(loadingChild);
   } else {
     var message = document.createElement('div');
-    message.innerHTML = `${data.text}`;
+    message.innerText = `${data.text}`;
     message.className = "user"
     messages.appendChild(message);
     var loading = document.createElement('div')
