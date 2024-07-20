@@ -12,7 +12,7 @@ import (
 var openAIKey = os.Getenv("OPENAI_API_KEY")
 
 const apiURL = "https://api.openai.com/v1/chat/completions"
-const LLM = "gpt-3.5-turbo"
+const LLM = "gpt-4o-mini"
 
 // OpenAIResponse represents the structure of the OpenAI API response
 type OpenAIResponse struct {
